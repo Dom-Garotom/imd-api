@@ -1,5 +1,5 @@
-import express from "express";
-import {router} from "./routes/routes.js"
+const express = require("express");
+const router = require("./routes/routes.js");
 
 const server = express();
 server.use(express.json());

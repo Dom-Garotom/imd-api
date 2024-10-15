@@ -2,7 +2,7 @@
   "name": "node",
   "version": "1.0.0",
   "main": "server.js",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "dev": "node --watch server.js",
     "start": "node server.js"

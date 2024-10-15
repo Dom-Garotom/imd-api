@@ -1,6 +1,6 @@
-import Ajv from "ajv";
+const Ajv = require("ajv");
 const ajv = new Ajv()
-import schema from "../schema/schemas.js";
+const schema = require("../schema/schemas.js");
 
 const validate = ajv.compile(schema)
 
@@ -17,4 +17,5 @@ const MyMildeware =  ( req , res , next) => {
     next();
 }
 
-export default MyMildeware;
+
+module.exports = MyMildeware;

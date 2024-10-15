@@ -9,4 +9,4 @@ const schema ={
     additionalProperties: false
 }
 
-export default schema
+module.exports = schema;

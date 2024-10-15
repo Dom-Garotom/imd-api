@@ -1,13 +1,14 @@
-import express from "express";
-import MyMildeware from "../midleware/midleware.js";
+const express = require("express");
+const MyMildeware = require("../midleware/midleware.js");
 const router = express.Router();
-import { Produto } from "../banco/banco.js";
+
+const { Produto } = require("../models")
 
 
 
 router.get('/produtos', async (req, res) => {
-    await Produto.findAll();
-    res.json(Produto);
+    const produtos =await Produto.findAll();
+    res.json(produtos);
 });
 
 
@@ -15,7 +16,7 @@ router.get('/produtos', async (req, res) => {
 //  rota de criar elemento 
 
 
-router.post('/produtos', MyMildeware ,async (req, res) => {
+router.post('/produtos', MyMildeware , async (req, res) => {
     const { nome, descricao, preco } = req.body;
     const id = Math.floor(Math.random() * 100);
 
@@ -69,10 +70,4 @@ router.delete('/produtos/:id', MyMildeware , async (req, res) => {
     res.status(204).send("Produto deletado"); 
 });
 
-
-
-
-
-
-
-export {router};
+module.exports = router;
