@@ -3,7 +3,13 @@ const schema ={
     properties: {
       nome: {type: "string"},
       descricao: {type: "string"},
-      preco: {type: "number"}
+      preco: {type: "number"},
+      tags: {
+        type:"array",
+        items:{
+          type:"string"
+        }
+      }
     },
     required: ["preco" , "nome"],
     additionalProperties: false
