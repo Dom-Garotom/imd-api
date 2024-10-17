@@ -2,12 +2,13 @@ const express = require("express");
 const MyMildeware = require("../midleware/midleware.js");
 const router = express.Router();
 
-const { Produto } = require("../models")
+const { Produto, Tag } = require("../models");
+const { where, Model } = require("sequelize");
 
 
 
 router.get('/produtos', async (req, res) => {
-    const produtos =await Produto.findAll();
+    const produtos = await Produto.findAll();
     res.json(produtos);
 });
 
@@ -17,7 +18,7 @@ router.get('/produtos', async (req, res) => {
 
 
 router.post('/produtos', MyMildeware , async (req, res) => {
-    const { nome, descricao, preco } = req.body;
+    const { nome, descricao, preco , tags } = req.body;
     const id = Math.floor(Math.random() * 100);
 
     const novoProduto = await Produto.create({ 
@@ -27,7 +28,20 @@ router.post('/produtos', MyMildeware , async (req, res) => {
         preco : preco 
     });
 
-    res.status(201).json(novoProduto);
+    if (tags && tags.length > 0){
+        const instancias = await Promise.all ( tags.map( tag => Tag.findOrCreate({ where : {nome : tag} }) ) );
+        novoProduto.addTags(instancias.map( a => a[0]));
+    }
+
+    const produto = await Produto.findByPk(novoProduto.id , {
+        include: {
+            model: Tag,
+            attributes: ["nome"],
+            through: { attributes: [] }
+        }
+    });
+    
+    res.status(201).json(produto);
 
 });
 
