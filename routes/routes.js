@@ -1,9 +1,10 @@
 const express = require("express");
 const MyMildeware = require("../midleware/midleware.js");
 const router = express.Router();
-
+const multer = require("multer");
+const path = require("path");
+const fs = require("fs");
 const { Produto, Tag  , ProdutoTags} = require("../models");
-const { where, Model } = require("sequelize");
 
 
 
@@ -134,5 +135,67 @@ router.delete('/produtos/:id', MyMildeware , async (req, res) => {
     await produto.destroy();
     res.status(204).send("Produto deletado"); 
 });
+
+
+// upload de imagem
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        const uploadDir = path.join(__dirname, "../public/uploads");
+        if (!fs.existsSync(uploadDir)) {
+            fs.mkdirSync(uploadDir, { recursive: true });
+        }
+        cb(null, uploadDir);
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + path.extname(file.originalname)); 
+    }
+});
+
+const upload = multer({
+    storage: storage,
+    limits: { fileSize: 5 * 1024 * 1024 }, 
+    fileFilter: function (req, file, cb) {
+        const filetypes = /jpeg|jpg|png|gif/; 
+        const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+        const mimetype = filetypes.test(file.mimetype);
+        if (extname && mimetype) {
+            return cb(null, true);
+        } else {
+            cb(new Error("Apenas imagens são permitidas (jpeg, jpg, png, gif)."));
+        }
+    }
+});
+
+
+// Rota para upload de imagem
+
+router.post('/produtos/:id/upload', MyMildeware, upload.single('imagem'), async (req, res) => {
+    const id = parseInt(req.params.id);
+
+    try {
+        const produto = await Produto.findByPk(id);
+
+        if (!produto) {
+            return res.status(404).json({ error: 'Produto não encontrado' });
+        }
+
+        if (!req.file) {
+            return res.status(400).json({ error: 'Nenhuma imagem foi enviada' });
+        }
+
+        const imagePath = `/uploads/${req.file.filename}`;
+
+        produto.caminhoImagem = imagePath;
+        await produto.save();
+
+        res.json({ message: "Upload de imagem realizado com sucesso", caminhoImagem: imagePath });
+    } catch (error) {
+        res.status(500).json({ error: 'Erro ao realizar upload de imagem' });
+    }
+});
+
+router.get('/static', express.static(path.join(__dirname, '../public')));
+
 
 module.exports = router;
