@@ -24,6 +24,22 @@ router.get('/produtos', async (req, res) => {
     res.json(produtos);
 });
 
+router.get('/pages', async (req, res) => {
+    const produto = await Produto.findAll({ 
+        include: {
+            model: Tag,
+            attributes: ["nome"],
+            through: { 
+                model: ProdutoTags,
+                attributes: [] 
+            }
+        }
+    });
+    
+    res.render('pages/index', {produtos: produto})
+})
+
+
 // rota de enviar produto por id
 
 router.get('/produtos/:id', async (req, res) => {
