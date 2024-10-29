@@ -8,7 +8,7 @@ const { Produto, Tag  , ProdutoTags} = require("../models");
 
 
 
-router.get('/produtos', async (req, res) => {
+router.get('/api/produtos', async (req, res) => {
     const produtos = await Produto.findAll({
         include: {
             model: Tag,
@@ -42,7 +42,7 @@ router.get('/pages', async (req, res) => {
 
 // rota de enviar produto por id
 
-router.get('/produtos/:id', async (req, res) => {
+router.get('/api/produtos/:id', async (req, res) => {
     const id = parseInt(req.params.id);
 
     const produtos = await Produto.findByPk(id , { 
@@ -65,9 +65,9 @@ router.get('/produtos/:id', async (req, res) => {
 //  rota de criar elemento 
 
 
-router.post('/produtos', MyMildeware , async (req, res) => {
+router.post('/api/produtos', MyMildeware , async (req, res) => {
     const { nome, descricao, preco , tags } = req.body;
-    const id = Math.floor(Math.random() * 100);
+    const id = Math.floor(Math.random() * 5000);
 
     const novoProduto = await Produto.create({ 
         id : id ,
@@ -108,7 +108,7 @@ router.post('/produtos', MyMildeware , async (req, res) => {
 
 // rota de atualizar elemneto 
 
-router.put('/produtos/:id', MyMildeware , async (req, res) => {
+router.put('/api/produtos/:id', MyMildeware , async (req, res) => {
     const id = parseInt(req.params.id);
     const { nome, descricao, preco } = req.body;
 
@@ -139,7 +139,7 @@ router.put('/produtos/:id', MyMildeware , async (req, res) => {
 
 // rota delete
 
-router.delete('/produtos/:id', MyMildeware , async (req, res) => {
+router.delete('/api/produtos/:id', MyMildeware , async (req, res) => {
     const id = parseInt(req.params.id);
     const produto = await Produto.findByPk(id);
 
