@@ -1,28 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simples exemplos de EJS</title>
-</head>
-<style>
-    div {
-        background-color: blanchedalmond;
-        width: 200px;
-        border-radius: 10px;
-        padding: 5px;
-        margin-top: 10px;
-    }
-</style>
-<body>
-    <% produtos.forEach( function (produto) {%>
-        <div>
-            <p>Id do produto : <%=produto.id %></p>
-            <p><%=produto.nome %></p>
-            <p><%=produto.descricao %></p>
-            <p>$<%=produto.preco %>.00</p>
-        </div>
-    <%}) %>
-</body>
-</html>
+<%- contentFor('pageSectionA') %>
+
+<h1>Produtos</h1>
+<% produtos.forEach( function (produto) {%>
+    <div>
+        <p>Id do produto : <%=produto.id %></p>
+        <p><%=produto.nome %></p>
+        <p><%=produto.descricao %></p>
+        <p>$<%=produto.preco %>.00</p>
+    </div>
+<%}) %>

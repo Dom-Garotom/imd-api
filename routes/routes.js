@@ -36,10 +36,10 @@ router.get('/pages', async (req, res) => {
         }
     });
     
-    res.render('pages/index', {produtos: produto})
+    res.render('pages/index', {produtos: produto , layout:'layouts/layout'})
 })
 
-
+ 
 // rota de enviar produto por id
 
 router.get('/api/produtos/:id', async (req, res) => {
