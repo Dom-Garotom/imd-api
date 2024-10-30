@@ -6,10 +6,11 @@ const server = express();
 server.use(express.json());
 server.use(router);
 server.use(expressLayouts)
-server.use('/static', express.static('public'))
+server.use(express.static('public'))
 
+      
 server.set('view engine', 'ejs')
-server.set('layout', 'layouts/layout')
+server.set('layout', 'layouts/index')
 
 
 

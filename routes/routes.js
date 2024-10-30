@@ -81,20 +81,20 @@ router.post("/api/produtos", MyMildeware, async (req, res) => {
     novoProduto.addTags(instancias.map(([tags, bool]) => tags));
   }
 
-  const produto = await Produto.findByPk(novoProduto.id, {
-    include: {
-      model: Tag,
-      attributes: ["nome"],
-      through: {
-        model: ProdutoTags,
-        attributes: [],
-      },
-    },
-  });
+  // const produto = await Produto.findByPk(novoProduto.id, {
+  //   include: {
+  //     model: Tag,
+  //     attributes: ["nome"],
+  //     through: {
+  //       model: ProdutoTags,
+  //       attributes: [],
+  //     },
+  //   },
+  // });
 
   res
     .status(201)
-    .json({ mensage: "produto criado com sucesso", produto: produto });
+    .json({ mensage: "produto criado com sucesso"});
 });
 
 // rota de atualizar elemneto
@@ -168,12 +168,17 @@ const upload = multer({ storage: storage, fileFilter: fileFilter });
 router.post("/:id/upload", upload.single("foto"), async (req, res) => {
   const produto = await Produto.findByPk(req.params.id);
   if (produto) {
-    produto.foto = `/static/uploads/${req.file.filename}`;
-    await produto.save();
-    res.json({ msg: "Upload realizado com sucesso!" });
+    if (req.file) {
+      produto.foto = `/static/uploads/${req.file.filename}`;
+      await produto.save();
+      res.json({ msg: "Upload realizado com sucesso!" });
+    } else {
+      res.status(400).json({ msg: "Nenhum arquivo foi enviado!" });
+    }
   } else {
     res.status(400).json({ msg: "Produto não encontrado!" });
   }
 });
+
 
 module.exports = router;

@@ -1,11 +1,73 @@
-<%- contentFor('pageSectionA') %>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simples exemplos de EJS</title>
+  </head>
+  <style>
+    *{
+        box-sizing: border-box;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
 
-<h1>Produtos</h1>
-<% produtos.forEach( function (produto) {%>
-    <div>
-        <p>Id do produto : <%=produto.id %></p>
-        <p><%=produto.nome %></p>
-        <p><%=produto.descricao %></p>
-        <p>$<%=produto.preco %>.00</p>
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      max-width: 1100px;
+      width: 100%;
+      background-color: #f3f3f3;
+      gap: 10px;
+    }
+
+    div {
+      background-color: #FFFFFF;
+      max-width: 500px;
+      width: 100%;
+      border-radius: 10px;
+      margin-top: 10px;
+    }
+
+    .info{
+        padding: 10px 10px;
+    }
+
+    div img {
+      max-width: 500px;
+      width: 100%;
+      border-radius: 5px;
+    }
+
+    p {
+      font-family: "Roboto", sans-serif;
+      font-weight: 500;
+    }
+  </style>
+  <body>
+    <h1>Produtos</h1>
+    <div class="container">
+      <% produtos.forEach( function (produto) {%>
+      <div>
+        <img
+          src="<%= produto.foto ? produto.foto : '/images/default-image.png' %>"
+          alt="Imagem do produto"
+        />
+
+        <div class="info">
+          <p><%=produto.nome %></p>
+          <p><%=produto.descricao %></p>
+          <p>$<%=produto.preco %>.00</p>
+        </div>
+      </div>
+      <%}) %>
     </div>
-<%}) %>
+  </body>
+</html>
