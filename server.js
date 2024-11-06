@@ -1,6 +1,7 @@
 const express = require("express");
 const router = require("./routes/routes.js");
 const expressLayouts = require('express-ejs-layouts')
+require('dotenv').config()
 
 const server = express();
 server.use(express.json());

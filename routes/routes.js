@@ -5,6 +5,23 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 const { Produto, Tag, ProdutoTags } = require("../models");
+const jwt = require("jsonwebtoken");
+const { randomBytes } = require("crypto");
+
+router.get("/token" , (req , res) =>{
+  const rand = randomBytes(1).toString("hex")
+  const payload = {
+    number : rand
+  }
+  
+  const token = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '1h'})
+  res.json({ accessToken: token })
+})
+
+
+
+
+
 
 router.get("/api/produtos", async (req, res) => {
   const produtos = await Produto.findAll({
@@ -179,6 +196,12 @@ router.post("/:id/upload", upload.single("foto"), async (req, res) => {
     res.status(400).json({ msg: "Produto não encontrado!" });
   }
 });
+
+
+
+
+
+
 
 
 module.exports = router;
